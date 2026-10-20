@@ -100,4 +100,4 @@ Ou abra o projeto no IntelliJ IDEA e rode a classe `Main`.
 ## Autor
 
 Projeto de estudo desenvolvido por Otavio.
-[GitHub](https://github.com/SEU-USUARIO) · [LinkedIn](https://www.linkedin.com/in/SEU-PERFIL)
+[GitHub](https://github.com/tavinxL) · [LinkedIn](https://www.linkedin.com/in/otavio-souza-46b8bb3a6/)
