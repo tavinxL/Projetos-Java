@@ -1,36 +1,87 @@
 package escola.app;
 
 import escola.dominio.Aluno;
+import escola.dominio.Desempenho;
 import escola.dominio.Disciplina;
+import escola.dominio.NotaInvalidaException;
 
 public class Main {
     static void main(String[] args) {
-        String[] nomesTeste = {"GB", "Ana", "Otavio", "", "A", "  ", null, " Bia "};
-        String[] disciplinasTeste = {"Matemática", "Português", "", "História"};
-        int[] aulasDisciplinas = {40, 0, 30, -5};
 
-        for (String nome : nomesTeste) {
-            try {
-                Aluno a = new Aluno(nome);
-                System.out.println("Criado: " + a);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
+        Desempenho d = new Desempenho(new Aluno("Otavio"), new Disciplina("Matematica", 40));
+
+        try {
+            d.lancarNota(1, 8);
+            System.out.println("Notas lançadas com sucesso");
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println();
 
-        for (int i = 0; i < aulasDisciplinas.length; i++) {
-            try {
-                Disciplina b = new Disciplina(disciplinasTeste[i], aulasDisciplinas[i]);
-                System.out.println("Criada: " + b);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
+        try {
+            d.lancarNota(2, 7);
+            System.out.println("Notas lançadas com sucesso");
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println();
-        System.out.println("Total de alunos: " + Aluno.getTotalAlunos());
 
 
+        try {
+            d.lancarNota(3, 0);
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println(d.trimestresLancados());
+
+
+
+        try {
+            d.lancarNota(1, 9);
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            d.lancarNota(4, 5);
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            d.lancarNota(3, 11);
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            System.out.println(d.getNota(3));
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println(d.mediaParcial());
+
+        try {
+            System.out.println(d.mediaAnual());
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println(d);
+
+        Desempenho d2 = new Desempenho(new Aluno("Ana"), new Disciplina("Matematica", 40));
+
+        try {
+            d2.lancarNota(1, 0);
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            System.out.println(d2.mediaParcial());
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 }
