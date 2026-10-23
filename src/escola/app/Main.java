@@ -83,6 +83,46 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
+        try {
+            d.registrarFaltas(1, 4);
+            System.out.println("Faltas registradas");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            d.registrarFaltas(1, 6);
+            System.out.println("Faltas registradas");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            d.registrarFaltas(1, 31);
+            System.out.println("Faltas registradas");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            d.registrarFaltas(2, 0);
+            System.out.println("Faltas registradas");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            d.registrarFaltas(4, 1);
+            System.out.println("Faltas registradas");
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(d.getFaltas(1));
+        System.out.println(d.totalFaltas());
+        System.out.printf("%.2f%n", d.frequenciaAnual());
+        System.out.println(d.frequenciaTrimestre(1));
+        System.out.println(d);
     }
 }
 
