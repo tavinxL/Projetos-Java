@@ -1,13 +1,15 @@
 package escola.dominio;
 
 
-
 public class Desempenho {
     private Aluno aluno;
     private Disciplina disciplina;
     private double[] notas = {0.0, 0.0, 0.0};
     private boolean[] lancada = {false, false, false};
-    private int[] faltas = {0, 0 ,0};
+    private int[] faltas = {0, 0, 0};
+    private static final double MEDIA_APROVACAO = 7.0;
+    private static final double MEDIA_RECUPERACAO = 5.0;
+    private static final double FREQUENCIA_MINIMA = 75.0;
 
     public Desempenho(Aluno aluno, Disciplina disciplina) {
         if (aluno == null || disciplina == null) {
@@ -69,7 +71,6 @@ public class Desempenho {
     }
 
 
-
     public double mediaAnual() {
         double media = 0;
         double soma = 0;
@@ -123,6 +124,23 @@ public class Desempenho {
         int aulasAssistidas = totalAulas - totalFaltas();
         return aulasAssistidas * 100.0 / totalAulas;
     }
+
+    public Situacao situacao() {
+        if (trimestresLancados() < 3) {
+            return Situacao.EM_ANDAMENTO;
+        }
+        if (frequenciaAnual() < FREQUENCIA_MINIMA) {
+            return Situacao.REPROVADO_POR_FALTA;
+        }
+        if (mediaAnual() >= MEDIA_APROVACAO) {
+            return Situacao.APROVADO;
+        }
+        if (mediaAnual() >= MEDIA_RECUPERACAO) {
+            return Situacao.RECUPERACAO;
+        }
+        return Situacao.REPROVADO_POR_NOTA;
+    }
+
 
     @Override
     public String toString() {
