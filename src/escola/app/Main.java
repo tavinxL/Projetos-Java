@@ -25,12 +25,6 @@ public class Main {
         }
 
 
-        try {
-            d.lancarNota(3, 0);
-        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
-            System.out.println(e.getMessage());
-        }
-
         System.out.println(d.trimestresLancados());
 
 
@@ -67,6 +61,18 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
+        try {
+            d.lancarNota(3, 0);
+        } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            System.out.println(d.mediaAnual());
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+
         System.out.println(d);
 
         Desempenho d2 = new Desempenho(new Aluno("Ana"), new Disciplina("Matematica", 40));
@@ -89,6 +95,8 @@ public class Main {
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println(d.frequenciaTrimestre(1));
 
         try {
             d.registrarFaltas(1, 6);

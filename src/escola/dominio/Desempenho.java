@@ -132,10 +132,10 @@ public class Desempenho {
             sb.append("T").append(i + 1).append("=");
             if (lancada[i]) {
                 sb.append(notas[i]);
-                sb.append(" (").append(getFaltas(i + 1)).append(" faltas)");
             } else {
                 sb.append("--");
             }
+            sb.append(" (").append(getFaltas(i + 1)).append(" faltas)");
             if (i < notas.length - 1) {
                 sb.append(" ");
             }
