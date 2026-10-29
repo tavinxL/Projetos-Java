@@ -1,24 +1,15 @@
 package escola.dominio;
 
-public class Aluno {
-    private String nome;
+public class Aluno extends Pessoa {
     private int matricula;
     private static int contadorMatricula = 1;
 
     public Aluno(String nome) {
-        if (nome == null || nome.trim().length() < 2) {
-            throw new IllegalArgumentException("Nome do aluno precisa ter no mínimo 2 caracteres");
-        }
-        this.nome = nome.trim();
+        super(nome != null ? nome.trim() : null);   
         this.matricula = contadorMatricula;
         contadorMatricula++;
 
     }
-
-    public String getNome() {
-        return nome;
-    }
-
 
     public int getMatricula() {
         return matricula;
@@ -26,7 +17,7 @@ public class Aluno {
 
     @Override
     public String toString() {
-        return "[" + matricula + "] " + nome;
+        return "[" + matricula + "] " + getNome();
     }
 
     public static int getTotalAlunos() {

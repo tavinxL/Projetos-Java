@@ -7,6 +7,7 @@ public class Turma {
     private Desempenho[][] desempenhos;
     private int quantidade;
     private int qtdDisciplinas;
+    private Professor[] professores;
 
     public Turma(String nome, Serie serie, int capacidade) {
         if (nome == null || nome.trim().isEmpty()) {
@@ -23,19 +24,41 @@ public class Turma {
         this.serie = serie;
         desempenhos = new Desempenho[capacidade][qtdDisciplinas];
         alunos = new Aluno[capacidade];
+        professores = new Professor[qtdDisciplinas];
 
     }
 
+    public void alocarProfessor(Professor professor, String nomeDisciplina) {
+        if (professor == null) {
+            throw new IllegalArgumentException("Professor está nulo");
+        }
+        if (nomeDisciplina == null || nomeDisciplina.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome da disciplina está nulo ou vazio");
+        }
+        for (int i = 0; i < qtdDisciplinas; i++) {
+            if (serie.getDisciplinas()[i].getNome().equalsIgnoreCase(nomeDisciplina)) {
+                for (Disciplina d : professor.getDisciplinas()) {
+                    if (d.getNome().equalsIgnoreCase(nomeDisciplina)) {
+                        professores[i] = professor;
+                        return;
+                    }
+                }
+                throw new IllegalArgumentException("Professor não ministra a disciplina especificada");
+            }
+        }
+        throw new IllegalArgumentException("Disciplina não encontrada");
+    }
+
     public void matricular(Aluno aluno) { 
-        for (int i = 0; i < quantidade; i++) {
         if (aluno == null) {
             throw new IllegalArgumentException("Aluno está nulo");
         }
-        if (alunos[i].getMatricula() == aluno.getMatricula()) {
-            throw new IllegalStateException("Aluno já está matriculado");
-        }
         if (quantidade >= alunos.length) {
             throw new IllegalStateException("Turma cheia");
+        }
+        for (int i = 0; i < quantidade; i++) {
+        if (alunos[i].getMatricula() == aluno.getMatricula()) {
+            throw new IllegalStateException("Aluno já está matriculado");
         }
         }
         alunos[quantidade] = aluno;
