@@ -3,25 +3,112 @@ package escola.app;
 import escola.dominio.Aluno;
 import escola.dominio.Desempenho;
 import escola.dominio.Disciplina;
-import escola.dominio.NotaInvalidaException;
+import escola.dominio.Serie;
 import escola.dominio.Situacao;
+import escola.dominio.Turma;
+import escola.dominio.NotaInvalidaException;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("=== NOTAS ===");
-        testarNotas();
+        // Testes antigos comentados para limpar o console
+        // System.out.println("=== NOTAS ===");
+        // testarNotas();
+        // System.out.println("\n=== FALTAS E FREQUÊNCIA ===");
+        // testarFaltas();
+        // System.out.println("\n=== SITUAÇÃO ===");
+        // testarSituacao();
 
-        System.out.println();
-        System.out.println("=== FALTAS E FREQUÊNCIA ===");
-        testarFaltas();
-
-        System.out.println();
-        System.out.println("=== SITUAÇÃO ===");
-        testarSituacao();
+        System.out.println("=== TESTE EXERCÍCIO 5: TURMAS E SÉRIES ===");
+        testarTurmasESeries();
     }
 
-    // ---------- Testes ----------
+    static void testarTurmasESeries() {
+        // 1. Criar Disciplinas e a Série
+        Disciplina mat = new Disciplina("Matemática", 40);
+        Disciplina port = new Disciplina("Português", 30);
+        Disciplina[] grade = {mat, port};
+
+        Serie sextoAno = new Serie("6º Ano", grade);
+
+        // 2. Testar Cópia Defensiva da Série (Física não deve aparecer na série)
+        grade[0] = new Disciplina("Física", 40); 
+        System.out.println("Teste de Cópia Defensiva (Deve continuar Matemática e Português):");
+        System.out.println(sextoAno); 
+        System.out.println();
+
+        // 3. Criar a Turma com capacidade para 3 alunos
+        Turma turma6A = new Turma("6A", sextoAno, 3);
+
+        // 4. Criar Alunos
+        Aluno a1 = new Aluno("Otavio");
+        Aluno a2 = new Aluno("Ana");
+        Aluno a3 = new Aluno("João");
+        Aluno a4 = new Aluno("Maria"); // Usado para estourar a capacidade
+
+        // 5. Testar Matrículas
+        System.out.println("--- Matrículas ---");
+        turma6A.matricular(a1);
+        turma6A.matricular(a2);
+        turma6A.matricular(a3);
+        System.out.println("3 alunos matriculados com sucesso.");
+        
+        tentarMatricular(turma6A, a1); // Deve dar erro: já matriculado
+        tentarMatricular(turma6A, a4); // Deve dar erro: turma cheia
+        System.out.println();
+
+        // 6. Lançamentos dos Cenários
+        System.out.println("--- Lançando Notas ---");
+        // Aluno 1: média 8 nas duas disciplinas (APROVADO)
+        lancarAnoTodo(turma6A, a1.getMatricula(), "Matemática", 8, 8, 8);
+        lancarAnoTodo(turma6A, a1.getMatricula(), "Português", 8, 8, 8);
+
+        // Aluno 2: média 8 em Mat, 4 em Port (REPROVADO_POR_NOTA)
+        lancarAnoTodo(turma6A, a2.getMatricula(), "Matemática", 8, 8, 8);
+        lancarAnoTodo(turma6A, a2.getMatricula(), "Português", 4, 4, 4);
+
+        // Aluno 3: só 1 nota em Mat (EM_ANDAMENTO)
+        turma6A.lancarNota(a3.getMatricula(), "Matemática", 1, 8.0);
+        System.out.println("Notas lançadas com sucesso.\n");
+
+        // 7. Checar a Situação Geral
+        System.out.println("--- Situação Geral dos Alunos ---");
+        System.out.println(a1.getNome() + ": " + turma6A.situacaoDoAluno(a1.getMatricula()).getDescricao()); // Aprovado
+        System.out.println(a2.getNome() + ": " + turma6A.situacaoDoAluno(a2.getMatricula()).getDescricao()); // Reprovado Nota
+        System.out.println(a3.getNome() + ": " + turma6A.situacaoDoAluno(a3.getMatricula()).getDescricao()); // Em Andamento
+        System.out.println();
+
+        // 8. Checar o Contador
+        System.out.println("--- Contadores ---");
+        System.out.println("Qtd APROVADO: " + turma6A.contarPorSituacao(Situacao.APROVADO)); // Deve ser 1
+        System.out.println("Qtd REPROVADO_POR_NOTA: " + turma6A.contarPorSituacao(Situacao.REPROVADO_POR_NOTA)); // Deve ser 1
+        System.out.println("Qtd EM_ANDAMENTO: " + turma6A.contarPorSituacao(Situacao.EM_ANDAMENTO)); // Deve ser 1
+        System.out.println();
+
+        // 9. Checar o toString (com o ajuste da formatação que conversamos)
+        System.out.println("--- toString da Turma ---");
+        System.out.println(turma6A);
+    }
+
+    // ---------- Novos Auxiliares para Turma ----------
+
+    static void tentarMatricular(Turma t, Aluno a) {
+        try {
+            t.matricular(a);
+            System.out.println("Aluno " + a.getNome() + " matriculado.");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println("Erro ao matricular " + a.getNome() + ": " + e.getMessage());
+        }
+    }
+
+    // Método pra evitar repetir as 3 chamadas de lancarNota
+    static void lancarAnoTodo(Turma t, int matricula, String disciplina, double n1, double n2, double n3) {
+        t.lancarNota(matricula, disciplina, 1, n1);
+        t.lancarNota(matricula, disciplina, 2, n2);
+        t.lancarNota(matricula, disciplina, 3, n3);
+    }
+
+    // ---------- Testes Antigos e seus Auxiliares (mantidos intactos) ----------
 
     static void testarNotas() {
         Desempenho d = new Desempenho(new Aluno("Otavio"), new Disciplina("Matematica", 40));
@@ -102,8 +189,6 @@ public class Main {
         System.out.println(montar("Aluno9", new double[]{8, 7, 9}, 0));
     }
 
-    // ---------- Auxiliares ----------
-
     static Desempenho montar(String nome, double[] notas, int faltasT1) {
         Desempenho d = new Desempenho(new Aluno(nome), new Disciplina("Matematica", 40));
         for (int i = 0; i < notas.length; i++) {
@@ -118,7 +203,6 @@ public class Main {
     static void tentarLancar(Desempenho d, int trimestre, double nota) {
         try {
             d.lancarNota(trimestre, nota);
-            System.out.println("T" + trimestre + " lançado: " + nota);
         } catch (IllegalArgumentException | IllegalStateException | NotaInvalidaException e) {
             System.out.println("Erro: " + e.getMessage());
         }

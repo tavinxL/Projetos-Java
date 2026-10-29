@@ -29,8 +29,10 @@ public class Desempenho {
         if (lancada[trimestre - 1]) {
             throw new IllegalStateException("Trimestre com nota existente");
         }
+
         notas[trimestre - 1] = nota;
         lancada[trimestre - 1] = true;
+
     }
 
     public double getNota(int trimestre) {
