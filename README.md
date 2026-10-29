@@ -146,7 +146,7 @@ A `Main` funciona como roteiro de testes manuais: cada caso imprime o resultado,
 - [x] Notas por trimestre e média
 - [x] Faltas e frequência
 - [x] Situação do aluno (aprovado, recuperação, reprovado)
-- [ ] Turmas e séries
+- [x] Turmas e séries
 - [ ] Boletim formatado
 - [ ] Menu no console
 - [ ] Testes automatizados
