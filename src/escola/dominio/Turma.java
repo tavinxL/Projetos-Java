@@ -185,4 +185,50 @@ public class Turma {
         }
         return sb.toString();
     }
+
+    public String gerarBoletim(int matricula) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("================================\n");
+        sb.append("BOLETIM ESCOLAR").append("\n");
+        int indiceAluno = -1;
+        for (int i = 0; i < quantidade; i++) {
+            if (alunos[i] != null && alunos[i].getMatricula() == matricula) {
+                indiceAluno = i;
+                sb.append("Aluno: ").append("[").append(matricula).append("] ").append(alunos[indiceAluno].getNome()).append("\n");
+                break;
+            }
+        }
+        if (indiceAluno == -1) {
+            throw new IllegalArgumentException("Aluno não encontrado na turma");
+        }
+        sb.append("Turma: ").append(nome).append(" - ").append("Série: ").append(serie.getNome()).append("\n");
+        sb.append("================================\n");
+        for (int i = 0; i < qtdDisciplinas; i++) {
+            Desempenho desempenho = desempenhos[indiceAluno][i];
+            Professor professor = professores[i];
+            sb.append("Disciplina: ").append(serie.getDisciplinas()[i].getNome());
+            if (professor != null) {
+                sb.append(" (Professor: ").append(professor.getNome()).append(")\n");
+            } else {
+                sb.append(" (Professor não alocado)\n");
+            }
+        
+            sb.append(desempenho.toString()).append("\n");
+            try {
+                sb.append("Media: ").append(String.format("%.2f", desempenho.mediaAnual()));
+            } catch (Exception e) {
+                sb.append("Media: N/A");
+            }
+            try {
+                sb.append(" | Frequência: ").append(String.format("%.2f", desempenho.frequenciaAnual()));
+            } catch (Exception e) {
+                sb.append(" | Frequência: N/A");
+            }
+            sb.append("% | Situação: ").append(desempenho.situacao()).append("\n");
+            sb.append("================================\n");
+        }
+        sb.append("Situação Geral do Aluno: ").append(situacaoDoAluno(matricula)).append("\n");
+        sb.append("================================\n");
+     return sb.toString();
+    }
 }
